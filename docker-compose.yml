@@ -6,22 +6,20 @@ services:
     ports:
       - "5001:5000"
     depends_on:
-      - db
+      - chemquote-db-host
     environment:
-      DB_HOST: db
-      DB_USER: user
-      DB_PASSWORD: password
-      DB_NAME: mydatabase
-      FLASK_ENV: development
-
-  db:
+      DB_HOST: ${DB_HOST}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      FLASK_ENV: ${FLASK_ENV}
+  chemquote-db-host:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -33,11 +31,11 @@ services:
     ports:
       - "8080:80"
     environment:
-      PMA_HOST: db
-      PMA_USER: user
-      PMA_PASSWORD: password
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${PMA_USER}  # Reference from .env
+      PMA_PASSWORD: ${PMA_PASSWORD}  # Reference from .env
     depends_on:
-      - db
+      - chemquote-db-host
 
 volumes:
   mysql_data:
