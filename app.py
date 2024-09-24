@@ -21,15 +21,15 @@ def get_data():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users;")
+        cursor.execute("SELECT * FROM contacts;")
         rows = cursor.fetchall()
 
         users = []
         for row in rows:
             users.append({
                 "id": row[0],
-                "username": row[1],
-                "email": row[2]
+                "customer_id": row[1],
+                "first_name": row[2]
             })
 
         cursor.close()
