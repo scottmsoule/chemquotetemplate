@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from . import api_bp
-from db import get_db_connection
+from app.db import get_db_connection
 
 @api_bp.route('/customers', methods=['GET'])
 def get_customers():

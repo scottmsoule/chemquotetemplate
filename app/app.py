@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from db import get_db_connection
+from app.db import get_db_connection
 from api import api_bp
 import logging
 

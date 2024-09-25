@@ -1,7 +1,7 @@
 import logging
 from flask import jsonify, request
 from . import api_bp
-from db import get_db_connection  # Import the connection function
+from app.db import get_db_connection  # Import the connection function
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
