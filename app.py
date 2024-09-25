@@ -1,44 +1,34 @@
-from flask import Flask, jsonify, render_template
-import mysql.connector
-import os
+from flask import Flask, render_template
+from db import get_db_connection
+from api import api_bp
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
-def get_db_connection():
-    return mysql.connector.connect(
-        host=os.environ['DB_HOST'],
-        user=os.environ['DB_USER'],
-        password=os.environ['DB_PASSWORD'],
-        database=os.environ['DB_NAME']
-    )
+# Register the API blueprint
+app.register_blueprint(api_bp, url_prefix='/api')
+
+@app.before_request
+def before_request():
+    """Create a new database connection before each request."""
+    app.db_connection = get_db_connection()
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM contacts;")
-        rows = cursor.fetchall()
+@app.route('/contact-manager')
+def contact_manager():
+    return render_template('contact_manager.html') 
 
-        users = []
-        for row in rows:
-            users.append({
-                "id": row[0],
-                "customer_id": row[1],
-                "first_name": row[2]
-            })
-
-        cursor.close()
-        conn.close()
-        return jsonify(users)
-
-    except mysql.connector.Error as err:
-        print(f"Database error: {err}")
-        return jsonify({"error": "Database error"}), 500
+@app.teardown_appcontext
+def close_db_connection(exception):
+    """Close database connection at the end of the request."""
+    db_conn = getattr(app, 'db_connection', None)
+    if db_conn:
+        db_conn.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -1,4 +1,3 @@
-# Example Dockerfile
 FROM python:3.9
 
 # Set the working directory

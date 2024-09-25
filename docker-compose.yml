@@ -11,6 +11,8 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${DB_NAME}
       FLASK_ENV: ${FLASK_ENV}
+    volumes:
+      - .:/app  # Mount current directory to /app in the container
   chemquote-db-host:
     image: mysql:8.4.2
     restart: always
