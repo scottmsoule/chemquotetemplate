@@ -3,8 +3,8 @@ version: '3.8'
 services:
   python-api:
     build:
-      context: ..  # Set the context to the parent directory (project root)
-      dockerfile: infrastructure/Dockerfile  # Specify the Dockerfile path
+      context: ../api # The context is the root level, so Dockerfile path is relative to it
+      dockerfile: Dockerfile  # Point to the Dockerfile inside the api folder
     ports:
       - "5001:5000"
     depends_on:
@@ -14,9 +14,17 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_USER: ${DB_USER}
       DB_NAME: ${DB_NAME}
-      FLASK_ENV: ${FLASK_ENV}
+      FLASK_DEBUG: ${FLASK_DEBUG}
+  frontend:
+    build:
+      context: ../frontend  # Point to your React app directory
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Expose React on port 3000
     volumes:
-      - ..:/app  # Mount the project root to /app in the container
+      - ../frontend:/frontend  # Mount the frontend directory for live reloading
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Enables polling for file changes (useful in Docker)
 
   chemquote-db-host:
     image: mysql:8.4.2
@@ -30,7 +38,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Load initialization SQL script
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -39,7 +47,7 @@ services:
       - "8080:80"
     environment:
       PMA_HOST: ${DB_HOST}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Reference from .env
     depends_on:
       - chemquote-db-host
 
