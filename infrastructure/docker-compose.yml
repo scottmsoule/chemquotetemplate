@@ -1,7 +1,8 @@
-version: '3.8'
 
 services:
   python-api:
+    networks:
+      - chemquote_network
     build:
       context: ../api # The context is the root level, so Dockerfile path is relative to it
       dockerfile: Dockerfile  # Point to the Dockerfile inside the api folder
@@ -16,17 +17,23 @@ services:
       DB_NAME: ${DB_NAME}
       FLASK_DEBUG: ${FLASK_DEBUG}
   frontend:
+    networks:
+      - chemquote_network
     build:
       context: ../frontend  # Point to your React app directory
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Expose React on port 3000
+      - "3000:80"  # Expose React on port 3000
     volumes:
       - ../frontend:/frontend  # Mount the frontend directory for live reloading
+      - ../frontend/.env:/app/.env 
     environment:
       - CHOKIDAR_USEPOLLING=true  # Enables polling for file changes (useful in Docker)
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
 
   chemquote-db-host:
+    networks:
+      - chemquote_network
     image: mysql:8.4.2
     restart: always
     environment:
@@ -41,6 +48,8 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Load initialization SQL script
 
   phpmyadmin:
+    networks:
+      - chemquote_network
     image: phpmyadmin/phpmyadmin
     restart: always
     ports:
@@ -53,3 +62,5 @@ services:
 
 volumes:
   mysql_data:
+networks:
+  chemquote_network:

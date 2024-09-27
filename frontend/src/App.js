@@ -1,13 +1,14 @@
 import React from 'react';
-import Contacts from './components/Contacts';
+import Welcome from './components/Welcome'; // Adjust the path as necessary
+import Contacts from './components/Contacts'; // Assuming you have this component
 
-function App() {
+const App = () => {
     return (
-        <div className="App">
-            TEST
-            <Contacts />
+        <div>
+            <Welcome />  {/* Display the welcome screen */}
+            {/* <Contacts /> Uncomment to show the contacts component */}
         </div>
     );
-}
+};
 
 export default App;
