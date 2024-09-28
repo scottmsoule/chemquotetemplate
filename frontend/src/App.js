@@ -1,14 +1,16 @@
 import React from 'react';
-import Welcome from './components/Welcome'; // Adjust the path as necessary
-import Contacts from './components/Contacts'; // Assuming you have this component
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Welcome from './components/Welcome';
+// other imports...
 
-const App = () => {
+function App() {
     return (
-        <div>
-            <Welcome />  {/* Display the welcome screen */}
-            {/* <Contacts /> Uncomment to show the contacts component */}
-        </div>
+        <Router>
+            <Switch>
+                <Route path="/" exact component={Welcome} />
+                {/* Other routes */}
+            </Switch>
+        </Router>
     );
-};
+}
 
-export default App;

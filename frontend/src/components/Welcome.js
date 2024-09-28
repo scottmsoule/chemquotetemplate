@@ -1,28 +1,24 @@
 import React from 'react';
-import './Welcome.css'; // Optional: import a CSS file for styling
+import './Welcome.css'; // Ensure to create this CSS file
 
 const Welcome = () => {
     return (
         <div className="welcome-container">
             <h1>Welcome to ChemQuote</h1>
             <p>
-                ChemQuote is an innovative tool designed specifically for chemical distribution companies.
-                Our platform helps you quote your customers effectively by calculating the total cost of an order, 
-                including any freight charges and various "what-if" scenarios.
+                ChemQuote is a powerful tool for chemical distribution companies, 
+                helping you to quote your customers with the cost of orders, 
+                including freight charges and various "what if" scenarios.
             </p>
-            <h2>Features</h2>
-            <ul>
-                <li>Accurate cost calculations</li>
-                <li>Flexible pricing options</li>
-                <li>Instant quotes</li>
-                <li>Scenario planning for better decision-making</li>
-            </ul>
-            <h2>How It Works</h2>
-            <p>
-                Simply enter the details of the order, and ChemQuote will provide you with a comprehensive quote
-                that takes into account all relevant costs, allowing you to serve your customers better and faster.
-            </p>
-            <h3>Get Started! Sign up today and start simplifying your quoting process!</h3>
+            <div className="features">
+                <h2>Features</h2>
+                <ul>
+                    <li>Calculate accurate quotes</li>
+                    <li>Manage contacts effectively</li>
+                    <li>Analyze freight costs</li>
+                    <li>Explore different pricing scenarios</li>
+                </ul>
+            </div>
         </div>
     );
 };
