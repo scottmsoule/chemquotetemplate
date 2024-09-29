@@ -1,10 +1,9 @@
-
 services:
   api:
     networks:
       - chemquote_network
     build:
-      context: ../api # The context is the root level, so Dockerfile path is relative to it
+      context: ../api  # The context is the root level, so Dockerfile path is relative to it
       dockerfile: Dockerfile  # Point to the Dockerfile inside the api folder
     ports:
       - "5001:5000"
@@ -16,17 +15,21 @@ services:
       DB_USER: ${DB_USER}
       DB_NAME: ${DB_NAME}
       FLASK_DEBUG: ${FLASK_DEBUG}
+
   frontend:
     networks:
       - chemquote_network
     build:
       context: ../ui/chemquote-ui  # Point to your Preact app directory
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile  # Ensure this is the development Dockerfile
     ports:
-      - "3000:80"      
+      - "3000:5173"  # Map host port 3000 to Vite's default port 5173
     environment:
       - CHOKIDAR_USEPOLLING=true  # Enables polling for file changes (useful in Docker)
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - VITE_API_URL=${BASE_API_URL}  # Use the correct environment variable for Vite
+    volumes:
+      - ../ui/chemquote-ui:/app  # Mount the frontend directory for live reloading
+      - /app/node_modules  # Persist node_modules to avoid reinstalling
 
   chemquote-db-host:
     networks:
