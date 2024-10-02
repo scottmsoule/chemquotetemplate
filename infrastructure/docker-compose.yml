@@ -1,0 +1,66 @@
+services:
+  api:
+    networks:
+      - chemquote_network
+    build:
+      context: ../api  # The context is the root level, so Dockerfile path is relative to it
+      dockerfile: Dockerfile  # Point to the Dockerfile inside the api folder
+    ports:
+      - "5001:5000"
+    depends_on:
+      - chemquote-db-host
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      FLASK_DEBUG: ${FLASK_DEBUG}
+
+  frontend:
+    networks:
+      - chemquote_network
+    build:
+      context: ../ui/chemquote-ui  # Point to your Preact app directory
+      dockerfile: Dockerfile  # Ensure this is the development Dockerfile
+    ports:
+      - "3000:5173"  # Map host port 3000 to Vite's default port 5173
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Enables polling for file changes (useful in Docker)
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL}  # Use the correct environment variable for Vite
+    volumes:
+      - ../ui/chemquote-ui:/app  # Mount the frontend directory for live reloading
+      - /app/node_modules  # Persist node_modules to avoid reinstalling
+
+  chemquote-db-host:
+    networks:
+      - chemquote_network
+    image: mysql:8.4.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Load initialization SQL script
+
+  phpmyadmin:
+    networks:
+      - chemquote_network
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: ${DB_HOST}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  # Reference from .env
+    depends_on:
+      - chemquote-db-host
+
+volumes:
+  mysql_data:
+networks:
+  chemquote_network:
