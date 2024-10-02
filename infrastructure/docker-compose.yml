@@ -26,7 +26,7 @@ services:
       - "3000:5173"  # Map host port 3000 to Vite's default port 5173
     environment:
       - CHOKIDAR_USEPOLLING=true  # Enables polling for file changes (useful in Docker)
-      - VITE_API_URL=${BASE_API_URL}  # Use the correct environment variable for Vite
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL}  # Use the correct environment variable for Vite
     volumes:
       - ../ui/chemquote-ui:/app  # Mount the frontend directory for live reloading
       - /app/node_modules  # Persist node_modules to avoid reinstalling

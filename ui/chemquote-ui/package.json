@@ -9,7 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "preact": "^10.23.1"
+    "@mantine/core": "^7.13.1",
+    "@mantine/hooks": "^7.13.1",
+    "preact": "^10.23.1",
+    "preact-router": "^4.1.2",
+    "react-jss": "^10.10.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.0",
