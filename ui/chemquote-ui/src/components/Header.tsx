@@ -1,12 +1,14 @@
+// components/Header.tsx
 import { FunctionalComponent } from 'preact';
+import { Link } from 'preact-router';
 
 const Header: FunctionalComponent = () => {
   return (
     <header>
       <h1>ChemQuote</h1>
       <nav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
+        <Link href="/">Home</Link>
+        <Link href="/about">About</Link> 
       </nav>
     </header>
   );
