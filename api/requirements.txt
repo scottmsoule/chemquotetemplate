@@ -1,6 +1,6 @@
 Flask==2.2.5
 Werkzeug==3.0.3
-mysql-connector-python==8.0.28
+mysql-connector-python==9.1.0
 gunicorn==22.0.0
 flask_cors==3.0.10
 flask-swagger-ui
